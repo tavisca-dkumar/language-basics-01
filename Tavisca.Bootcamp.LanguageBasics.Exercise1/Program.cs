@@ -20,13 +20,11 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
             Console.WriteLine($"{args} : {result}");
         }
 
-        public static int Position(int x, string y)
+        public static int Position(int x, string y) //this function takes '?' contains string,actual int and returns digit
         {
-
             int i, k = 0;
-            string str = x.ToString();
-
-            if (str.Length == y.Length)
+            string str = x.ToString(); // convert comparable int to string for comparision
+            if (str.Length == y.Length) // comparing both strings are same length if not returns -1
             {
                 for (i = 0; i < y.Length; i++)
                 {
@@ -36,58 +34,53 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
                             return -1;
                     }
                     else
-                        k = int.Parse(new string(str[i], 1));
+                        k = int.Parse(new string(str[i], 1)); //converted the digit from string to int 
                 }
             }
             else
                 return -1;
-            //Console.WriteLine(i);
-            if (i == y.Length)
+            if (i == y.Length) // returned k only if matches all positions otherwise returned -1
                 return k;
             else
                 return -1;
-
-
         }
-
         public static int FindDigit(string equation)
         {
             // Add your code here.
-            int x, y, z, k, a, e, q, i = 0;
-            String n1, n2, n3;
-            a = equation.IndexOf('*');
-            e = equation.IndexOf('=');
-            q = equation.IndexOf("?");
-            n1 = equation.Substring(0, a);
-            n2 = equation.Substring(a + 1, e - a - 1);
-            n3 = equation.Substring(e + 1);
-            // Console.WriteLine(n1 + " " + n2 + " " + n3);
-            if (q > e)
+            int intOperand1, intOperand2, intSolution, digit, multiplicationIndex, equalIndex, questionmarkIndex, i = 0;
+            String operand1, operand2, solution;
+            multiplicationIndex = equation.IndexOf('*');
+            equalIndex = equation.IndexOf('=');
+            questionmarkIndex = equation.IndexOf("?");
+            operand1 = equation.Substring(0, multiplicationIndex);
+            operand2 = equation.Substring(multiplicationIndex + 1, equalIndex - multiplicationIndex - 1);
+            solution = equation.Substring(equalIndex + 1);
+            if (questionmarkIndex > equalIndex) //checked whelther '?' lies in LHS or RHS
             {
-                x = int.Parse(n1);
-                y = int.Parse(n2);
-                k = x * y;
-                i = Position(k, n3);//compare
+                intOperand1 = int.Parse(operand1);
+                intOperand2 = int.Parse(operand2);
+                digit = intOperand1 * intOperand2;
+                i = Position(digit, solution);
             }
-            else if (a > q)
+            else if (multiplicationIndex > questionmarkIndex) // checked whelther '?' lies in operand1 or operand 2
             {
-                y = int.Parse(n2);
-                z = int.Parse(n3);
-                if (z % y > 0)
+                intOperand2 = int.Parse(operand2);
+                intSolution = int.Parse(solution);
+                if (intSolution % intOperand2 > 0)
                     return -1;
                 else
-                    k = z / y;
-                i = Position(k, n1);//compare
+                    digit = intSolution / intOperand2;
+                i = Position(digit, operand1);//compare
             }
             else
             {
-                x = int.Parse(n1);
-                z = int.Parse(n3);
-                if (z % x > 0)
+                intOperand1 = int.Parse(operand1);
+                intSolution = int.Parse(solution);
+                if (intSolution % intOperand1 > 0)
                     return -1;
                 else
-                    k = z / x;
-                i = Position(k, n2);//compare
+                    digit = intSolution / intOperand1;
+                i = Position(digit, operand2);//compare
 
             }
             return i;
